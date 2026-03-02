@@ -11,6 +11,11 @@
 // ECB enables the basic ECB 16-byte block algorithm. All can be enabled simultaneously.
 
 // The #ifndef-guard allows it to be configured before #include'ing or at compile time.
+
+#define CBC 1   //on veut un cryptage selon le mode AES
+#define ECB 0
+#define CTR 0
+
 #ifndef CBC
   #define CBC 1
 #endif
