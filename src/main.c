@@ -1,7 +1,10 @@
 #include "stm32l476xx.h"
+#include "usart.h"
+
 
 int main(void){
-
+      
+   
     /* Enable GPIOA clock and read back to ensure it's active */
     RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
     (void)RCC->AHB2ENR;
@@ -14,12 +17,19 @@ int main(void){
     GPIOA->MODER |=  (1U << 10);
 
    
+     __enable_irq(); 
+
+     USART3_Init();
+	 
+
     while(1){
         GPIOA->BSRR = (1U << 5);               // set PA5
         for(volatile uint32_t i = 0; i < 200000; ++i) __NOP();  
 
         GPIOA->BSRR = (1U << (5 + 16));       // reset PA5
         for(volatile uint32_t i = 0; i < 200000; ++i) __NOP();  
+
+        USART3_SendString("Sending data \r\n");
 }
 
 }
