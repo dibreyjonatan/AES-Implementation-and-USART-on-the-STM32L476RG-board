@@ -19,16 +19,31 @@ void USART3_Init(void){
     USART3->BRR = 4000000 / 115200;      // Baud rate (si HSI = 4 MHz)
     USART3->CR1 = USART_CR1_TE | USART_CR1_RE | USART_CR1_RXNEIE;       // Activer la transmission seulement
    
- 	NVIC_SetPriority(USART3_IRQn, 2);  
+ 	  NVIC_SetPriority(USART3_IRQn, 2);  
     NVIC_EnableIRQ(USART3_IRQn);
 	
-	USART3->CR1 |= USART_CR1_UE;        // Activer USART3
+	  USART3->CR1 |= USART_CR1_UE;        // Activer USART3
 
 }
 void USART3_SendChar(char c){
- while (!(USART3->ISR & USART_ISR_TXE)); // Attente TXE=1
+    while (!(USART3->ISR & USART_ISR_TXE)); // Attente TXE=1
     USART3->TDR = c;
 }
 void USART3_SendString(const char *s){
-  while (*s) USART3_SendChar(*s++);
+    while (*s) USART3_SendChar(*s++);
+}
+
+//Convertit bytes en string HEX et les envoie via USART3 
+
+void USART3_SendHex(const uint8_t *buf, uint16_t len) {
+    char hex[3];
+    for (uint16_t i = 0; i < len; i++) {
+        uint8_t hi = (buf[i] >> 4) & 0xF;
+        uint8_t lo =  buf[i]       & 0xF;
+        hex[0] = hi < 10 ? '0' + hi : 'A' + hi - 10;
+        hex[1] = lo < 10 ? '0' + lo : 'A' + lo - 10;
+        hex[2] = '\0';
+        USART3_SendString(hex);
+    }
+    USART3_SendString("\r\n");
 }
