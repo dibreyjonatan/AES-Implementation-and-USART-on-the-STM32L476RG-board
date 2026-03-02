@@ -42,12 +42,21 @@ def main():
                     print(f"{text}")
                     #je transforme le type str en list 
                     z=list(text)
+                    # le 11 je l'ai eu en comptant la sortie standard et j'ai compté jusqu'au niveau où le cipher text commence
                     #print(str(z[11:])) pour tester la conversion et extraire la liste converti 
                     #extraire la liste qui contient le mot codé, et le convertir vers une liste car je vais l'utiliser dans le fichier bash
                     l=""
                     for i in z[11:] :
                         l+=i 
                     #print(l) conversion réussit 
+                    #utilisation de subprocess pour déchiffrer le text cipher 
+                    
+                    # test
+                    #cmd="./decrypt.sh \"0B9A21095B9E5069DCF9ED41B294DF8B\""
+
+                    # Application  
+                    cmd=f"./decrypt.sh {l}"
+                    subprocess.call(['bash', '-c', cmd])
 
                         
 
